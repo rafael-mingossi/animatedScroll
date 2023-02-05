@@ -1,11 +1,46 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions } from "react-native";
+import { useState } from "react";
 import { styles } from "./styles";
+import { ProgressBar } from "../../components/ProgressBar";
+
+type scrollProps = {
+  layoutMeasurement: {
+    height: number;
+  };
+  contentOffset: {
+    y: number;
+  };
+  contentSize: {
+    height: number;
+  };
+};
 
 export function Post() {
+  const [percentage, setPercentage] = useState(0);
+
+  const dimensions = useWindowDimensions();
+
+  function scrollPercentage({
+    layoutMeasurement,
+    contentOffset,
+    contentSize,
+  }: scrollProps) {
+    const visibleContent = Math.ceil(
+      (dimensions.height / contentSize.height) * 100
+    );
+    const value =
+      ((layoutMeasurement.height + contentOffset.y) / contentSize.height) * 100;
+    setPercentage(value < visibleContent ? 0 : value);
+  }
+
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.title}>Lorem Title</Text>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.content}
+        onScroll={(event) => scrollPercentage(event.nativeEvent)}
+      >
+        <Text style={styles.title}>Title</Text>
         <View>
           <Text style={styles.text}>
             Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -217,6 +252,7 @@ export function Post() {
           </Text>
         </View>
       </ScrollView>
+      <ProgressBar value={percentage} />
     </View>
   );
 }
