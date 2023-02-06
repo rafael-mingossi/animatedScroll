@@ -12,7 +12,6 @@ export const styles = StyleSheet.create({
     alignContent: "center",
     display: "flex",
     alignItems: "center",
-    flexDirection: "row",
     paddingHorizontal: 16,
   },
   text: {
@@ -28,5 +27,9 @@ export const styles = StyleSheet.create({
   progress: {
     height: 3,
     backgroundColor: "#8257E5",
+  },
+  progressContent: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
